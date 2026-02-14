@@ -30,6 +30,28 @@ function App() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    if (formData.email.trim() && !formData.email.includes('@')) {
+      alert('Invalid email. Please check your email address.');
+      return;
+    }
+
+    if (formData.phone.trim() && !/^\d{10}$/.test(formData.phone.trim())) {
+      alert('Invalid phone number. Please enter a 10-digit phone number.');
+      return;
+    }
+
+    if (formData.dob.trim()) {
+      const selectedDate = new Date(formData.dob);
+      const today = new Date();
+      selectedDate.setHours(0, 0, 0, 0);
+      today.setHours(0, 0, 0, 0);
+
+      if (selectedDate > today) {
+        alert('Invalid date of birth. Date of birth cannot be in the future.');
+        return;
+      }
+    }
+
     if (!formData.username.trim()) {
       alert('Please fill out this field.');
       return;
@@ -47,26 +69,6 @@ function App() {
 
     if (!formData.dob.trim()) {
       alert('Please fill out this field.');
-      return;
-    }
-
-    if (!formData.email.includes('@')) {
-      alert('Invalid email. Please check your email address.');
-      return;
-    }
-
-    if (!/^\d{10}$/.test(formData.phone.trim())) {
-      alert('Invalid phone number. Please enter a 10-digit phone number.');
-      return;
-    }
-
-    const selectedDate = new Date(formData.dob);
-    const today = new Date();
-    selectedDate.setHours(0, 0, 0, 0);
-    today.setHours(0, 0, 0, 0);
-
-    if (selectedDate > today) {
-      alert('Invalid phone number. Please enter a 10-digit phone number.');
       return;
     }
 
