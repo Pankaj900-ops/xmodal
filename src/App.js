@@ -1,23 +1,132 @@
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
 
 function App() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    phone: '',
+    dob: '',
+  });
+
+  const handleInputChange = (event) => {
+    const { id, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+  };
+
+  const resetForm = () => {
+    setFormData({
+      username: '',
+      email: '',
+      phone: '',
+      dob: '',
+    });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (!formData.username.trim()) {
+      alert('Please fill out this field.');
+      return;
+    }
+
+    if (!formData.email.trim()) {
+      alert('Please fill out this field.');
+      return;
+    }
+
+    if (!formData.phone.trim()) {
+      alert('Please fill out this field.');
+      return;
+    }
+
+    if (!formData.dob.trim()) {
+      alert('Please fill out this field.');
+      return;
+    }
+
+    if (!formData.email.includes('@')) {
+      alert('Invalid email. Please check your email address.');
+      return;
+    }
+
+    if (!/^\d{10}$/.test(formData.phone.trim())) {
+      alert('Invalid phone number. Please enter a 10-digit phone number.');
+      return;
+    }
+
+    const selectedDate = new Date(formData.dob);
+    const today = new Date();
+    selectedDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate > today) {
+      alert('Invalid phone number. Please enter a 10-digit phone number.');
+      return;
+    }
+
+    resetForm();
+    setIsModalOpen(false);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app-container">
+      <button
+        type="button"
+        className="open-form-button"
+        onClick={() => setIsModalOpen(true)}
+      >
+        Open Form
+      </button>
+
+      {isModalOpen && (
+        <div className="modal" onClick={() => setIsModalOpen(false)}>
+          <div className="modal-content" onClick={(event) => event.stopPropagation()}>
+            <form onSubmit={handleSubmit}>
+              <label htmlFor="username">Username</label>
+              <input
+                id="username"
+                type="text"
+                value={formData.username}
+                onChange={handleInputChange}
+              />
+
+              <label htmlFor="email">Email Address</label>
+              <input
+                id="email"
+                type="text"
+                value={formData.email}
+                onChange={handleInputChange}
+              />
+
+              <label htmlFor="phone">Phone Number</label>
+              <input
+                id="phone"
+                type="tel"
+                value={formData.phone}
+                onChange={handleInputChange}
+              />
+
+              <label htmlFor="dob">Date of Birth</label>
+              <input
+                id="dob"
+                type="date"
+                value={formData.dob}
+                onChange={handleInputChange}
+              />
+
+              <button type="submit" className="submit-button">
+                Submit
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
